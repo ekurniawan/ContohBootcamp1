@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SampleEmptyProject.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace SampleEmptyProject
         {
             services.AddControllersWithViews();
             services.AddSingleton<IGreeter, Greeter>();
+            services.AddScoped<IStudentDAL, StudentDAL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
