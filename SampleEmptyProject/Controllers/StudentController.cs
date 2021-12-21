@@ -27,7 +27,8 @@ namespace SampleEmptyProject.Controllers
         // GET: StudentController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var result = _studentDAL.GetById(id);
+            return Content($"{result.FirstName} {result.LastName} {result.EnrollmentDate}");
         }
 
         // GET: StudentController/Create

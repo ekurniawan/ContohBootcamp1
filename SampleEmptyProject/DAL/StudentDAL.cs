@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using SampleEmptyProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+
 
 namespace SampleEmptyProject.DAL
 {
@@ -16,7 +18,7 @@ namespace SampleEmptyProject.DAL
 
         private string getConnStr()
         {
-            return _config.GetConnectionString("AzureConnection");
+            return _config.GetConnectionString("LocalConnection");
         }
 
         public void Delete(string id)
@@ -25,6 +27,16 @@ namespace SampleEmptyProject.DAL
         }
 
         public IEnumerable<Student> GetAll()
+        {
+            using (SqlConnection conn = new SqlConnection(getConnStr()))
+            {
+                string strSql = @"select * from Students order by FirstName asc";
+                var results = conn.Query<Student>(strSql);
+                return results;
+            }
+        }
+
+        /*public IEnumerable<Student> GetAll()
         {
             List<Student> lstStudent = new List<Student>();
             using(SqlConnection conn = new SqlConnection(getConnStr()))
@@ -51,11 +63,17 @@ namespace SampleEmptyProject.DAL
                 conn.Close();
             }
             return lstStudent;
-        }
+        }*/
 
         public Student GetById(int id)
         {
-            throw new System.NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(getConnStr()))
+            {
+                var strSql = @"select * from Students where ID=@ID";
+                var param = new { ID=id };
+                var result = conn.QuerySingle<Student>(strSql, param);
+                return result;
+            }
         }
 
         public void Insert(Student student)
