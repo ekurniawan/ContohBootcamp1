@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SampleEmptyProject.DAL;
 using SampleEmptyProject.Models;
+using System;
 
 namespace SampleEmptyProject.Controllers
 {
@@ -70,7 +71,22 @@ namespace SampleEmptyProject.Controllers
         // GET: StudentController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            try
+            {
+                Student student = new Student
+                {
+                    ID = id,
+                    FirstName = "Clark",
+                    LastName = "Kent",
+                    EnrollmentDate = DateTime.Now
+                };
+                _studentDAL.Update(student);
+                return Content("Data berhasil diupdate");
+            }
+            catch (System.Exception ex)
+            {
+                return Content(ex.Message);
+            }
         }
 
         // POST: StudentController/Edit/5
@@ -91,7 +107,15 @@ namespace SampleEmptyProject.Controllers
         // GET: StudentController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            try
+            {
+                _studentDAL.Delete(id.ToString());
+                return Content("data berhasil didelete");
+            }
+            catch (Exception ex) 
+            {
+                return Content(ex.Message);
+            }
         }
 
         // POST: StudentController/Delete/5

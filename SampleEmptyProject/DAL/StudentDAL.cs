@@ -23,7 +23,22 @@ namespace SampleEmptyProject.DAL
 
         public void Delete(string id)
         {
-            throw new System.NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(getConnStr()))
+            {
+                string strSql = @"delete from Students where ID=@ID";
+                var param = new { ID = id };
+                try
+                {
+                    var student = GetById(Convert.ToInt32(id));
+                    if (student == null)
+                        throw new Exception("data tidak ditemukan");
+                    conn.Execute(strSql, param);
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception(sqlEx.Message);
+                }
+            }
         }
 
         public IEnumerable<Student> GetAll()
