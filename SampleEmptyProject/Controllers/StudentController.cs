@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SampleEmptyProject.DAL;
+using SampleEmptyProject.Models;
 
 namespace SampleEmptyProject.Controllers
 {
@@ -34,7 +35,21 @@ namespace SampleEmptyProject.Controllers
         // GET: StudentController/Create
         public ActionResult Create()
         {
-            return View();
+            try
+            {
+                Student student = new Student
+                {
+                    FirstName = "Peter",
+                    LastName = "Parker",
+                    EnrollmentDate = System.DateTime.Now
+                };
+                _studentDAL.Insert(student);
+                return Content("data berhasil ditambah");
+            }
+            catch (System.Exception ex)
+            {
+                return Content(ex.Message);
+            }
         }
 
         // POST: StudentController/Create

@@ -78,12 +78,52 @@ namespace SampleEmptyProject.DAL
 
         public void Insert(Student student)
         {
-            throw new System.NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(getConnStr()))
+            {
+                string strSql = @"insert into Students(FirstName,LastName,EnrollmentDate) 
+                                  values(@FirstName,@LastName,@EnrollmentDate)";
+                var param = new
+                {
+                    FirstName = student.FirstName,
+                    LastName = student.LastName,
+                    EnrollmentDate = student.EnrollmentDate
+                };
+                try
+                {
+                    int status = conn.Execute(strSql, param);
+                    if (status != 1)
+                        throw new Exception("gagal menambahkan data");
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception(sqlEx.Message);
+                }
+            }
         }
 
         public void Update(Student student)
         {
-            throw new System.NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(getConnStr()))
+            {
+                var strSql = @"update Students set FirstName=@FirstName, LastName=@LastName, 
+                EnrollmentDate=@EnrollmentDate where ID=@ID";
+                var param = new
+                {
+                    FirstName = student.FirstName,
+                    LastName = student.LastName,
+                    EnrollmentDate = student.EnrollmentDate,
+                    ID=student.ID
+                };
+                try
+                {
+                    int status = conn.Execute(strSql, param);
+                    if (status != 1) throw new Exception("Data gagal diupdate");
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception(sqlEx.Message);
+                }
+            }
         }
     }
 }
